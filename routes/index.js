@@ -24,7 +24,7 @@ router.get('/', async function(req, res, next) {
       name: key.split("/").pop()
     }
   }))
-  res.render('index', { pictures: pictures, title: 'Express' });
+  res.render('index', { pictures: pictures, title: 'Express', isAuthenticated: req.oidc.isAuthenticated() });
 });
 
 module.exports = router;
