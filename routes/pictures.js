@@ -34,13 +34,13 @@ router.get('/', requiresAuth(), async function(req, res, next) {
 router.get('/:pictureName', requiresAuth(), async function(req, res, next) {
     let my_file = await s3.getObject({
       Bucket: process.env.CYCLIC_BUCKET_NAME,
-      Key: "public/" + req.params.pictureName,
+      Key: req.oidc.user.email + '/' + req.params.pictureName,
     }).promise();
     const picture = {
         src: Buffer.from(my_file.Body).toString('base64'),
         name: req.params.pictureName
     }
-    res.render('pictureDetails', { picture: picture});
+    res.render('pictureDetails', { picture: picture, isAuthenticated: req.oidc.isAuthenticated()});
   });
 
 
