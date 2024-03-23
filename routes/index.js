@@ -10,7 +10,7 @@ router.get('/', async function(req, res, next) {
   var params = {
     Bucket: process.env.CYCLIC_BUCKET_NAME,
     Delimiter: '/',
-    Prefix: 'Public/'
+    Prefix: 'public/'
   };
   var allObjects = await s3.listObjects(params).promise();
   var keys = allObjects?.Contents.map( x=> x.Key).slice(0, 3);
