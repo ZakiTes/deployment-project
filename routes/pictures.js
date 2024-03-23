@@ -26,7 +26,7 @@ router.get('/', requiresAuth(), async function(req, res, next) {
             name: key.split("/").pop()
         }
     }))
-    res.render('pictures', { pictures: pictures});
+    res.render('pictures', { pictures: pictures, isAuthenticated: req.oidc.isAuthenticated()});
 });
 
 
