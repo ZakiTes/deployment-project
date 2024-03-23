@@ -31,17 +31,17 @@ router.get('/', requiresAuth(), async function(req, res, next) {
 
 
 
-router.get('/:pictureName', function(req, res, next) {
-    const picture = req.params.pictureName;
-    const picturePath = path.join(__dirname, '../pictures/', picture);
-
-    fs.access(picturePath, fs.constants.F_OK, (err) => {
-        if (err) {
-            return res.status(404).send('Picture not found');
-        }
-        res.render('pictures', {pictures: [picture], picture: picture });
-    });
-});
+router.get('/:pictureName', requiresAuth(), async function(req, res, next) {
+    let my_file = await s3.getObject({
+      Bucket: process.env.CYCLIC_BUCKET_NAME,
+      Key: "public/" + req.params.pictureName,
+    }).promise();
+    const picture = {
+        src: Buffer.from(my_file.Body).toString('base64'),
+        name: req.params.pictureName
+    }
+    res.render('pictureDetails', { picture: picture});
+  });
 
 
 router.post('/',requiresAuth(), async function(req, res, next) {
